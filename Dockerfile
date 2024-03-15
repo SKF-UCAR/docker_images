@@ -12,6 +12,8 @@ RUN dnf group install -y --allowerasing "Development Tools"
 # Install tools needed for LROSE
 RUN dnf install -y epel-release
 RUN dnf install -y 'dnf-command(config-manager)'
+
+# install generic tools 
 RUN dnf install -y \
     tcsh wget git \
     emacs rsync python mlocate \
@@ -22,14 +24,18 @@ RUN dnf install -y --allowerasing \
     libX11-devel libXext-devel libcurl-devel \
     libpng-devel libtiff-devel zlib-devel libzip \
     expat-devel libcurl-devel openmpi-devel \
-    flex fftw3-devel
-RUN dnf install -y --allowerasing \
-    bzip2-devel qt6-qtbase-devel qt6-qtdeclarative-devel \
-    qt6-qtserialport-devel qt6-qtremoteobjects-devel \
-    log4cpp-devel hdf5-devel netcdf-devel \
     xorg-x11-xauth \
+    flex fftw3-devel bzip2-devel 
+
+# install project related libs 
+RUN dnf install -y --allowerasing \
+    qt6-qtbase-devel qt6-qtdeclarative-devel \
+    qt6-qtserialport-devel qt6-qtremoteobjects-devel \
+    log4cpp-devel gtest-devel boost-devel \
+    hdf5-devel netcdf-devel \
     rpm-build redhat-rpm-config \
-    rpm-devel rpmdevtools
+    rpm-devel rpmdevtools socat
+
 # Clean up package manager cache
 RUN dnf clean all
 
@@ -37,9 +43,12 @@ RUN dnf clean all
 ARG USERNAME=apar
 ARG PASSWORD=pa$$w0rd
 RUN useradd -m -p $(openssl passwd -1 $PASSWORD) $USERNAME
+# adding user to sudo group
+RUN usermod -aG wheel ${USERNAME}
 
 # Set the working directory
 WORKDIR /home/${USERNAME}
+USER ${USERNAME}
 RUN mkdir ./.ssh
 VOLUME ["/home/${USERNAME}/.ssh"]
 

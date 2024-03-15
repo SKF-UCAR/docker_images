@@ -7,11 +7,14 @@ Create a common toolset Docker Image to build and run APAR apps/utils
 ## Build the image
 
 Replace `myuser` and `mypassword` with the desired username/password for the default user:
+
 ``` bash
 docker build --build-arg USERNAME=myuser --build-arg PASSWORD=mypassword -t alma-linux-qt6 .
 ``` 
 
 ## Run the container
+
+To run the container:
 
 ```
 docker run -it \
@@ -28,5 +31,15 @@ docker run -it \
     --name apar_tools \
     -v C:/users/user1/.ssh:~/.ssh:ro \
     -v C:/projects:~/projects \
+    alma-linux-qt6
+```
+
+Sometimes it is more prudent to have a designated volume without binding ~/project to an existing folder. In this case use:
+
+```
+docker run -it \
+    --name apar_tools \
+    -v <LOCAL_PATH>/.ssh:~/.ssh:ro \
+    -v projects:~/projects \
     alma-linux-qt6
 ```
