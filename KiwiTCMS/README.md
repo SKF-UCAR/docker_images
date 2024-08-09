@@ -23,4 +23,8 @@ docker compose up -d
 
 ## Config
 
+```
+docker exec -it kiwi_web /Kiwi/manage.py initial_setup
+```
+
 ## Use
